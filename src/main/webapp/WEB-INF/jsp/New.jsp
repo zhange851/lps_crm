@@ -18,10 +18,6 @@
                window.location.href="<%=basePath%>customer/list.do";
            });
         });
-        <%--function jumpList() {--%>
-            <%--alert("不进行新增操作了");--%>
-            <%--window.location.href="<%=basePath%>customer/list.do";--%>
-        <%--}--%>
     </script>
 </head>
 <body>

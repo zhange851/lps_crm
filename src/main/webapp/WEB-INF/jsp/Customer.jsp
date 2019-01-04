@@ -14,59 +14,58 @@
     <title>查询用户</title>
     <script src="<%=basePath%>js/jquery.min.js"></script>
     <script>
-        function insertCustomer() {
-            window.location.href = "<%=basePath%>customer/edit.do?custId=0";
-        }
-
-        function deleteCustomer(id) {
-            if (confirm("确实要删除吗？")) {
-                $.post("<%=basePath%>customer/delete.do", {"id": id}, function (data) {
-                    alert("客户删除数据成功！");
+        $(function(){
+            $("#insert_customer").click(function(){
+                window.location.href = "<%=basePath%>customer/edit.do?custId=0";
+            });
+            $(".delete_customer").click(function () {
+                var id = $(this).attr("cust_id");
+                if (confirm("确实要删除吗？")) {
+                    $.post("<%=basePath%>customer/delete.do", {"id": id}, function (data) {
+                        alert("客户删除数据成功！");
+                        window.location.reload();
+                    });
+                }
+            });
+            $("#insert_customer_tan").click(function(){
+                document.getElementById("all_light").style.display = "block";
+                document.getElementById("contes").style.display = "block";
+            });
+            $("#insert_customer_tan_submit").click(function(){
+                $.post("<%=basePath%>customer/insert_tan.do", $("#insert_customer_from").serialize(), function(data){
+                    alert("客户信息更新成功！");
                     window.location.reload();
                 });
-            }
-        }
-        
-        function insertCustomerTan(id) {
-            document.getElementById("all_light").style.display = "block";
-            document.getElementById("contes").style.display = "block";
-        }
-        
-        function  insertCustomerTanSubmit() {
-            $.post("<%=basePath%>customer/insert_tan.do", $("#insert_customer_from").serialize(), function(data){
-                alert("客户信息更新成功！");
+            });
+            $(".update_customer_tan").click(function () {
+                var id = $(this).attr("cust_id");
+                $.post("<%=basePath%>customer/edit_tan.do",{"custId":id}, function (data) {
+                    $("#editCustomerId").val(data.cust_id);
+                    $("#editCustomerName").val(data.cust_name);
+                    $("#editCustomerSource").val(data.cust_source);
+                    $("#editCustomerIndustry").val(data.cust_industry);
+                    $("#editCustomerLevel").val(data.cust_level);
+                    $("#editCustomerLinkman").val(data.cust_linkman);
+                    $("#editCustomerPhone").val(data.cust_phone);
+                    $("#editCustomerMobile").val(data.cust_mobile);
+                    $("#editCustomerZipcode").val(data.cust_zipcode);
+                    $("#editCustomerAddress").val(data.cust_address);
+                });
+                document.getElementById("all_light").style.display = "block";
+                document.getElementById("contes1").style.display = "block";
+            });
+            $("#update_customer_tan_submit").click(function () {
+                $.post("<%=basePath%>customer/update.do", $("#editCustomerForm").serialize(), function (data) {
+                    alert("客户信息更新成功");
+                    window.location.reload();
+                });
+            });
+
+            $(".no_save").click(function(){
+                alert("不进行保存操作了");
                 window.location.reload();
             });
-        }
-
-        function updateCustomerTan(id) {
-            $.post("<%=basePath%>customer/edit_tan.do",{"custId":id}, function (data) {
-                $("#editCustomerId").val(data.cust_id);
-                $("#editCustomerName").val(data.cust_name);
-                $("#editCustomerSource").val(data.cust_source);
-                $("#editCustomerIndustry").val(data.cust_industry);
-                $("#editCustomerLevel").val(data.cust_level);
-                $("#editCustomerLinkman").val(data.cust_linkman);
-                $("#editCustomerPhone").val(data.cust_phone);
-                $("#editCustomerMobile").val(data.cust_mobile);
-                $("#editCustomerZipcode").val(data.cust_zipcode);
-                $("#editCustomerAddress").val(data.cust_address);
-            });
-            document.getElementById("all_light").style.display = "block";
-            document.getElementById("contes1").style.display = "block";
-        }
-
-        function updateCustomerTanSubmit() {
-            $.post("<%=basePath%>customer/update.do", $("#editCustomerForm").serialize(), function (data) {
-                alert("客户信息更新成功");
-                window.location.reload();
-            });
-        }
-
-        function jumpList() {
-            alert("不进行保存操作了");
-            window.location.reload();
-        }
+        });
     </script>
     <style type="text/css">
         #all_light { /*整个弹窗的页面*/
@@ -150,8 +149,8 @@
             </div>
             <div>
                 <button type="submit">查询</button>
-                <button type="button" onclick="insertCustomer()">新增</button>
-                <button type="button" onclick="insertCustomerTan()">新增弹框</button>
+                <button type="button" id="insert_customer">新增</button>
+                <button type="button" id="insert_customer_tan">新增弹框</button>
             </div>
 
         </form>
@@ -184,8 +183,8 @@
                     <td>
                             <%--<a href="../query.jsp" >修改</a>--%>
                         <a href="<%=basePath%>customer/edit.do?custId=${row.cust_id}">修改</a>
-                        <a href="#" onclick="deleteCustomer(${row.cust_id})">删除</a>
-                        <a href="#" onclick="updateCustomerTan(${row.cust_id})">修改弹框</a>
+                        <a href="#" class="delete_customer" cust_id="${row.cust_id}">删除</a>
+                        <a href="#" class="update_customer_tan" cust_id="${row.cust_id}">修改弹框</a>
                     </td>
                 </tr>
             </c:forEach>
@@ -256,8 +255,8 @@
                     <input id="insertCustomerAddress" name="cust_address" />
                 </div>
                 <div>
-                    <button type="button" onclick="insertCustomerTanSubmit()">新增修改</button>
-                    <button type="button" onclick="jumpList()">不保存</button>
+                    <button type="button" id="insert_customer_tan_submit">新增修改</button>
+                    <button type="button" class="no_save">不保存</button>
                 </div>
             </form>
         </div>
@@ -318,8 +317,8 @@
                     <input id="editCustomerAddress" name="cust_address" />
                 </div>
                 <div>
-                    <button type="button" onclick="updateCustomerTanSubmit()">保存修改</button>
-                    <button type="button" onclick="jumpList()">不保存</button>
+                    <button type="button" id="update_customer_tan_submit">保存修改</button>
+                    <button type="button" class="no_save">不保存</button>
                 </div>
             </form>
         </div>
