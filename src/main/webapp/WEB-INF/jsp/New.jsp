@@ -11,11 +11,17 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>新增用户</title>
     <script src="<%=basePath%>js/jquery.min.js"></script>
-    <script type="text/javascript">
-        function jumpList() {
-            alert("不进行新增操作了");
-            window.location.href="<%=basePath%>customer/list.do";
-        }
+    <script>
+        $(function () {
+           $("#nosave").click(function () {
+               alert("不进行新增操作了");
+               window.location.href="<%=basePath%>customer/list.do";
+           });
+        });
+        <%--function jumpList() {--%>
+            <%--alert("不进行新增操作了");--%>
+            <%--window.location.href="<%=basePath%>customer/list.do";--%>
+        <%--}--%>
     </script>
 </head>
 <body>
@@ -74,7 +80,7 @@
         </div>
         <div>
             <button type="submit">保存修改</button>
-            <button type="button" onclick="jumpList()">不保存</button>
+            <button type="button" id="nosave">不保存</button>
         </div>
     </form>
 </div>
